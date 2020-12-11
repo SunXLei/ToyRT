@@ -19,4 +19,30 @@
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\vec3.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\color.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ray.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\hittable.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sphere.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\HittableList.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\rtweekend.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\camera.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
 </Project>
