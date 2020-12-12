@@ -23,6 +23,7 @@
     <ProjectGuid>{28ED086D-98C4-4B9E-BE61-71CB45A10B22}</ProjectGuid>
     <RootNamespace>ToyRT</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <ProjectName>ToyRT</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

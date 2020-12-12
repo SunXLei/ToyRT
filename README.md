@@ -1,3 +1,6 @@
 # ToyRT
 A toy raytracing practice
-Following RT in one weekend
+
+This is now following RT in one weekend tutorial
+
+The code maybe modified after finishing the tutorial
