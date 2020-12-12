@@ -1,18 +1,21 @@
 #pragma once
+#include "rtweekend.h"
+
 #include "hittable.h"
-#include "vec3.h"
 
 class sphere : public hittable 
 {
 public:
 	sphere() {}
-	sphere(point3 cen, double r) : center(cen), radius(r) {};
+	sphere(point3 cen, double r, shared_ptr<material> m)
+		: center(cen), radius(r), mat_ptr(m) {};
 
 	virtual bool hit(const ray& r, double tMin, double tMax, hitRecord& rec) const override;
 
 public:
 	point3 center;
 	double radius;
+	shared_ptr<material> mat_ptr;
 };
 
 bool sphere::hit(const ray& r, double tMin, double tMax, hitRecord& rec) const 
@@ -40,6 +43,7 @@ bool sphere::hit(const ray& r, double tMin, double tMax, hitRecord& rec) const
 	rec.p = r.at(rec.t);
 	vec3 outwardNormal = (rec.p - center) / radius;
 	rec.SetFaceNormal(r, outwardNormal);
+	rec.mat_ptr = mat_ptr;
 
 	return true;
 }

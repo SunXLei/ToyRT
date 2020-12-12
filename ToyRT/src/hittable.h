@@ -1,10 +1,14 @@
 #pragma once
-#include "ray.h"
+#include "rtweekend.h"
+
+// forward declaration
+class material;
 
 struct hitRecord 
 {
 	point3 p;
 	vec3 normal;
+	shared_ptr<material> mat_ptr;
 	double t;
 	bool isFrontFace;
 

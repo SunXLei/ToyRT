@@ -3,6 +3,7 @@
 #include "camera.h"
 #include "color.h"
 #include "hittablelist.h"
+#include "material.h"
 #include "sphere.h"
 
 #include <iostream>
@@ -25,19 +26,29 @@ double HitSphere(const point3& center, double radius, const ray& r)
 }
 
 
-color RayColor(const ray& r, const hittable& world) 
+color RayColor(const ray& r, const hittable& world, int depth) 
 {
 	hitRecord rec;
 
-	if (world.hit(r, 0, infinity, rec)) 
+	if (depth <= 0)
+		return color(0, 0, 0);
+
+	// more recursive, more black, the 0.001 is for hitting itself
+	if (world.hit(r, 0.001, infinity, rec))
 	{
-		return 0.5 * (rec.normal + color(1, 1, 1));
+		ray scattered;
+		color attenuation;
+		if (rec.mat_ptr->scatter(r, rec, attenuation, scattered))
+			return attenuation * RayColor(scattered, world, depth - 1);
+
+		return color(0,0,0);
 	}
 
 	vec3 unitDirection = unit_vector(r.direction());
 	auto t = 0.5*(unitDirection.y() + 1.0);
 	return (1.0 - t)*color(1.0, 1.0, 1.0) + t * color(0.5, 0.7, 1.0);
 }
+
 
 int main()
 {
@@ -46,17 +57,28 @@ int main()
 
 	// Image
 	const auto aspectRatio = 16.0 / 9.0;
-	const int imageWidth = 400;
+	const int imageWidth = 1000;
 	const int imageHeight = static_cast<int>(imageWidth / aspectRatio);
-	const int samples_per_pixel = 100;
+	const int samples_per_pixel = 300;
+	const int max_depth = 50;
 
 	// World
 	hittable_list world;
-	world.add(make_shared<sphere>(point3(0, 0, -1), 0.5));
-	world.add(make_shared<sphere>(point3(0, -100.5, -1), 100));
+
+	auto material_ground = make_shared<lambertian>(color(0.8, 0.8, 0.0));
+	auto material_center = make_shared<lambertian>(color(0.1, 0.2, 0.5));
+	auto material_left = make_shared<dielectric>(1.5);
+	auto material_right = make_shared<metal>(color(0.8, 0.6, 0.2), 0.0);
+
+	world.add(make_shared<sphere>(point3(0.0, -100.5, -1.0), 100.0, material_ground));
+	world.add(make_shared<sphere>(point3(0.0, 1.5, -3.0), 0.5, material_center));
+	world.add(make_shared<sphere>(point3(-1.0, 0.0, -2.0), 0.5, material_center));
+	world.add(make_shared<sphere>(point3(0.0, 0.0, -1.0), 0.5, material_left));
+	world.add(make_shared<sphere>(point3(0.0, 0.0, -1.0), -0.4, material_left));
+	world.add(make_shared<sphere>(point3(1.0, 0.0, -1.0), 0.5, material_right));
 
 	// Camera
-	camera cam;
+	camera cam(45.0, aspectRatio);
 
 	// Render
 	ofs << "P3\n" << imageWidth << " " << imageHeight << "\n255\n";
@@ -72,7 +94,7 @@ int main()
 				auto u = (i + random_double()) / (imageWidth - 1);
 				auto v = (j + random_double()) / (imageHeight - 1);
 				ray r = cam.get_ray(u, v);
-				pixel_color += RayColor(r, world);
+				pixel_color += RayColor(r, world, max_depth);
 			}
 			WriteColor(ofs, pixel_color, samples_per_pixel);
 		}
