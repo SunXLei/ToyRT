@@ -1,6 +1,8 @@
 # ToyRayTracer
 
-ToyRayTracer is a path tracer practice writing in c++11.  Most of the implementation referred to Ray Tracing In One Weekend Series which is a great tutorial. The main features are listed below:
+ToyRayTracer is a path tracer practice writing in c++11.  Most of the implementation referred to Ray Tracing In One Weekend Series which is a great tutorial. 
+
+The main features are listed below:
 
 - Monte Carlo Path Tracing
 - Importance sampling
